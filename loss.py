@@ -119,3 +119,22 @@ def cal_smooth_term_diff(img1, img2, learned_mask1, overlap):
 
 
     # return  loss, dh_pixel
+    
+    """
+    
+    TODO:基于salient object detection的语义loss
+    
+    
+    
+    """
+#================================================================
+
+def object_consistency():
+    
+    
+    
+    return loss
+
+
+
+#================================================================

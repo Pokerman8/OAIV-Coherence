@@ -19,7 +19,7 @@ SUMMARY_DIR = os.path.join(last_path, 'summary')
 writer = SummaryWriter(log_dir=SUMMARY_DIR)
 
 # path to save the model files
-MODEL_DIR = os.path.join(last_path, 'model')
+MODEL_DIR = '/inspurfs/group/gaoshh/jinjiping/result/UDIS2/warp-model'
 
 # create folders if it dose not exist
 if not os.path.exists(MODEL_DIR):
@@ -187,7 +187,7 @@ if __name__=="__main__":
     parser.add_argument('--gpu', type=str, default='0')
     parser.add_argument('--batch_size', type=int, default=1)
     parser.add_argument('--max_epoch', type=int, default=50)
-    parser.add_argument('--train_path', type=str, default='/opt/data/private/nl/Data/UDIS-D/training')
+    parser.add_argument('--train_path', type=str, default='/inspurfs/group/gaoshh/jinjiping/dataset/UDIS-D/training/')
 
     #nl: parse the arguments
     args = parser.parse_args()
