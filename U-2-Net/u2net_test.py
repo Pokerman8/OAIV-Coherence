@@ -58,9 +58,9 @@ def main():
 
 
 
-    image_dir = '/inspurfs/group/gaoshh/jinjiping/UDIS2/composition/composition'
-    prediction_dir = os.path.join(os.getcwd(), 'test_data', model_name + '_results' + os.sep)
-    model_dir = '/public/home/jinjiping2023/OASD/U-2-Net/saved_models/u2net.pth'
+    image_dir = '/inspurfs/group/gaoshh/jinjiping/UDIS2/UDIS-D/testing/testing/warp1'
+    prediction_dir = "/inspurfs/group/gaoshh/jinjiping/UDIS2/UDIS-D/testing/testing/warp1_after_object_detection/"
+    model_dir = '/inspurfs/group/gaoshh/jinjiping/UDIS2/saved_models/u2net.pth'
 
     img_name_list = glob.glob(image_dir + os.sep + '*')
     print(img_name_list)
