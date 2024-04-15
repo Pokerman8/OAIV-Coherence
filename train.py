@@ -117,9 +117,19 @@ def train(args):
             # on different image
             smooth2_loss = cal_smooth_term_diff( warp1_tensor,  warp2_tensor, learned_mask1, mask1_tensor*mask2_tensor)
             smooth2_loss = 1000 * smooth2_loss
-
-
-            total_loss = boundary_loss + smooth1_loss + smooth2_loss
+            
+            
+            """
+                TODO:基于salient object detection的语义loss 
+            """            
+            #================================================================
+            object_loss = 0
+            
+            
+            
+            
+            #================================================================
+            total_loss = boundary_loss + smooth1_loss + smooth2_loss + object_loss
             total_loss.backward()
             # clip the gradient
             torch.nn.utils.clip_grad_norm_(net.parameters(), max_norm=3, norm_type=2)

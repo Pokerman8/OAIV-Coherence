@@ -90,7 +90,7 @@ class TestDataset(Dataset):
     def __getitem__(self, index):
 
 
-                # load image1
+        # load image1
         warp1 = cv2.imread(self.datas['warp1']['image'][index])
         warp1 = warp1.astype(dtype=np.float32)
         warp1 = (warp1 / 127.5) - 1.0
