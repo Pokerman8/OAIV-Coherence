@@ -10,7 +10,7 @@ import cv2
 
 
 last_path = os.path.abspath(os.path.join(os.path.dirname("__file__"), os.path.pardir))
-MODEL_DIR = os.path.join(last_path, 'model')
+MODEL_DIR = '/inspurfs/group/gaoshh/jinjiping/dataset/UDIS-D/model/'
 
 
 

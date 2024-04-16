@@ -4,16 +4,16 @@ import torch.nn.functional as F
 
 
 
-def build_model(net, warp1_tensor, warp2_tensor, mask1_tensor, mask2_tensor):
+def build_model(net, warp1_tensor, warp2_tensor, mask1_tensor, mask2_tensor, object_mask1_tensor):
 
-    out  = net(warp1_tensor, warp2_tensor, mask1_tensor, mask2_tensor)
+    out  = net(warp1_tensor, warp2_tensor, mask1_tensor, mask2_tensor, object_mask1_tensor)
 
     learned_mask1 = (mask1_tensor - mask1_tensor*mask2_tensor) + mask1_tensor*mask2_tensor*out
     learned_mask2 = (mask2_tensor - mask1_tensor*mask2_tensor) + mask1_tensor*mask2_tensor*(1-out)
     stitched_image = (warp1_tensor+1.) * learned_mask1 + (warp2_tensor+1.)*learned_mask2 - 1.
 
     out_dict = {}
-    out_dict.update(learned_mask1=learned_mask1, learned_mask2=learned_mask2, stitched_image = stitched_image)
+    out_dict.update(learned_mask1=learned_mask1, learned_mask2=learned_mask2, stitched_image = stitched_image, object_mask1 = object_mask1_tensor)
 
 
     return out_dict
@@ -102,7 +102,7 @@ class Network(nn.Module):
                 m.bias.data.zero_()
 
 
-    def forward(self, x, y, m1, m2):
+    def forward(self, x, y, m1, m2, m_obj):
 
 
         x1 = self.down1(x)

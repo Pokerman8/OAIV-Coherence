@@ -7,7 +7,7 @@ from torch.utils.tensorboard import SummaryWriter
 from network import build_model, Network
 from dataset import TrainDataset
 import glob
-from loss import cal_boundary_term, cal_smooth_term_stitch, cal_smooth_term_diff
+from loss import cal_boundary_term, cal_smooth_term_stitch, cal_smooth_term_diff, object_completeness
 
 
 
@@ -15,11 +15,11 @@ from loss import cal_boundary_term, cal_smooth_term_stitch, cal_smooth_term_diff
 last_path = os.path.abspath(os.path.join(os.path.dirname("__file__"), os.path.pardir))
 
 # path to save the summary files
-SUMMARY_DIR = os.path.join(last_path, 'summary')
+SUMMARY_DIR = '/public/home/jinjiping2023/OASD/oasd/summary_object_loss'
 writer = SummaryWriter(log_dir=SUMMARY_DIR)
 
 # path to save the model files
-MODEL_DIR = '/inspurfs/group/gaoshh/jinjiping/result/UDIS2/warp-model'
+MODEL_DIR = '/inspurfs/group/gaoshh/jinjiping/UDIS2/composition/composition_models_object_loss'
 
 # create folders if it dose not exist
 if not os.path.exists(MODEL_DIR):
@@ -80,6 +80,7 @@ def train(args):
         sigma_boundary_loss = 0.
         sigma_smooth1_loss = 0.
         sigma_smooth2_loss = 0.
+        sigma_object_loss = 0. 
 
         print(epoch, 'lr={:.6f}'.format(optimizer.state_dict()['param_groups'][0]['lr']))
 
@@ -89,23 +90,27 @@ def train(args):
             warp2_tensor = batch_value[1].float()
             mask1_tensor = batch_value[2].float()
             mask2_tensor = batch_value[3].float()
+            object_mask1 = batch_value[4].float()
 
             if torch.cuda.is_available():
                 warp1_tensor = warp1_tensor.cuda()
                 warp2_tensor = warp2_tensor.cuda()
                 mask1_tensor = mask1_tensor.cuda()
                 mask2_tensor = mask2_tensor.cuda()
+                object_mask1 = object_mask1.cuda()
 
 
             # forward, backward, update weights
             optimizer.zero_grad()
 
-            batch_out = build_model(net,  warp1_tensor,  warp2_tensor, mask1_tensor, mask2_tensor)
+            batch_out = build_model(net,  warp1_tensor,  warp2_tensor, mask1_tensor, mask2_tensor, object_mask1)
 
             learned_mask1 = batch_out['learned_mask1']
             learned_mask2 = batch_out['learned_mask2']
             stitched_image = batch_out['stitched_image']
 
+            object_mask1 = batch_out['object_mask1']
+            
             # boundary term
             boundary_loss, boundary_mask1 = cal_boundary_term( warp1_tensor,  warp2_tensor, mask1_tensor, mask2_tensor, stitched_image)
             boundary_loss = 10000 * boundary_loss
@@ -123,7 +128,7 @@ def train(args):
                 TODO:基于salient object detection的语义loss 
             """            
             #================================================================
-            object_loss = 0
+            object_loss = object_completeness(object_mask1, learned_mask1, learned_mask2)
             
             
             
@@ -139,6 +144,7 @@ def train(args):
             sigma_boundary_loss += boundary_loss.item()
             sigma_smooth1_loss += smooth1_loss.item()
             sigma_smooth2_loss += smooth2_loss.item()
+            sigma_object_loss += object_loss.item()
             sigma_total_loss += total_loss.item()
 
             print(glob_iter)
@@ -148,13 +154,16 @@ def train(args):
                 average_boundary_loss = sigma_boundary_loss/ score_print_fre
                 average_smooth1_loss = sigma_smooth1_loss/ score_print_fre
                 average_smooth2_loss = sigma_smooth2_loss/ score_print_fre
-
+                average_object_loss = sigma_object_loss/ score_print_fre
+                
+                
                 sigma_total_loss = 0.
                 sigma_boundary_loss = 0.
                 sigma_smooth1_loss = 0.
                 sigma_smooth2_loss = 0.
-
-                print("Training: Epoch[{:0>3}/{:0>3}] Iteration[{:0>3}]/[{:0>3}] Total Loss: {:.4f}   boundary loss: {:.4f}  smooth loss: {:.4f}  diff loss: {:.4f}   lr={:.8f}".format(epoch + 1, args.max_epoch, i + 1, len(train_loader), average_total_loss, average_boundary_loss, average_smooth1_loss, average_smooth2_loss, optimizer.state_dict()['param_groups'][0]['lr']))
+                sigma_object_loss = 0.
+                
+                print("Training: Epoch[{:0>3}/{:0>3}] Iteration[{:0>3}]/[{:0>3}] Total Loss: {:.4f}   boundary loss: {:.4f}  smooth loss: {:.4f}  diff loss: {:.4f}  object loss: {:.4f}   lr={:.8f}".format(epoch + 1, args.max_epoch, i + 1, len(train_loader), average_total_loss, average_boundary_loss, average_smooth1_loss, average_smooth2_loss, average_object_loss, optimizer.state_dict()['param_groups'][0]['lr']))
 
                 # visualization
                 writer.add_image("inpu1", (warp1_tensor[0]+1.)/2., glob_iter)
@@ -171,6 +180,7 @@ def train(args):
                 writer.add_scalar('average_boundary_loss', average_boundary_loss, glob_iter)
                 writer.add_scalar('average_smooth1_loss', average_smooth1_loss, glob_iter)
                 writer.add_scalar('average_smooth2_loss', average_smooth2_loss, glob_iter)
+                writer.add_scalar('average_object_loss', average_object_loss, glob_iter)
 
             glob_iter += 1
 
@@ -197,7 +207,7 @@ if __name__=="__main__":
     parser.add_argument('--gpu', type=str, default='0')
     parser.add_argument('--batch_size', type=int, default=1)
     parser.add_argument('--max_epoch', type=int, default=50)
-    parser.add_argument('--train_path', type=str, default='/inspurfs/group/gaoshh/jinjiping/dataset/UDIS-D/training/')
+    parser.add_argument('--train_path', type=str, default='/inspurfs/group/gaoshh/jinjiping/UDIS2/UDIS-D/training/training')
 
     #nl: parse the arguments
     args = parser.parse_args()

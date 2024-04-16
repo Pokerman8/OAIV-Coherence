@@ -121,18 +121,37 @@ def cal_smooth_term_diff(img1, img2, learned_mask1, overlap):
     # return  loss, dh_pixel
     
     """
+    warp1\input1\mask1是ref
+    warp2\input2\mask2是target
     
     TODO:基于salient object detection的语义loss
     
+    鼓励object的mask都来自M_cr
     
+    M_1 = M_object & M_cr
+    M_2 = M_object & M_ct
+    loss = M_1*M_cr + M_2*M_cr
     
+    return loss
     """
 #================================================================
 
-def object_consistency():
-    
-    
-    
+def object_completeness(object_mask1, learned_mask1, learned_mask2):
+    # 计算object_mask1 和 learned_mask1 的重叠部分
+    M_1 = object_mask1 * learned_mask1
+
+    # 计算object_mask1 和 learned_mask2 的重叠部分
+    M_2 = object_mask1 * learned_mask2
+
+    # 完整性损失: 鼓励object_mask1完全在learned_mask1内
+    completeness_loss = torch.sum((object_mask1 - M_1) ** 2)
+
+    # 排他性损失: 最小化object_mask1与learned_mask2的重叠
+    exclusivity_loss = torch.sum(M_2 ** 2)
+
+    # 总损失: 考虑到完整性和排他性
+    loss = completeness_loss + exclusivity_loss
+
     return loss
 
 

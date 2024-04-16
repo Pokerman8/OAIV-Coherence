@@ -16,7 +16,7 @@ class TrainDataset(Dataset):
         datas = glob.glob(os.path.join(self.train_path, '*'))
         for data in sorted(datas):
             data_name = data.split('/')[-1]
-            if data_name == 'warp1' or data_name == 'warp2' or data_name == 'mask1' or data_name == 'mask2':
+            if data_name == 'warp1' or data_name == 'warp2' or data_name == 'mask1' or data_name == 'mask2' or data_name == 'object_mask1':
                 self.datas[data_name] = {}
                 self.datas[data_name]['path'] = data
                 self.datas[data_name]['image'] = glob.glob(os.path.join(data, '*.jpg'))
@@ -49,21 +49,28 @@ class TrainDataset(Dataset):
         mask2 = np.expand_dims(mask2[:,:,0], 2) / 255
         mask2 = np.transpose(mask2, [2, 0, 1])
 
+        # load boject_mask1
+        object_mask1 = cv2.imread(self.datas['object_mask1']['image'][index])
+        object_mask1 = object_mask1.astype(dtype=np.float32)
+        object_mask1 = np.expand_dims(object_mask1[:,:,0], 2) / 255
+        object_mask1 = np.transpose(object_mask1, [2, 0, 1])
+        
         # convert to tensor
         warp1_tensor = torch.tensor(warp1)
         warp2_tensor = torch.tensor(warp2)
         mask1_tensor = torch.tensor(mask1)
         mask2_tensor = torch.tensor(mask2)
-
-        #return (input1_tensor, input2_tensor, mask1_tensor, mask2_tensor)
+        object_mask1_tensor = torch.tensor(object_mask1)
+        
+        #return (input1_tensor, input2_tensor, mask1_tensor, mask2_tensor, object_mask1_tensor)
 
         if_exchange = random.randint(0,1)
         if if_exchange == 0:
             #print(if_exchange)
-            return (warp1_tensor, warp2_tensor, mask1_tensor, mask2_tensor)
+            return (warp1_tensor, warp2_tensor, mask1_tensor, mask2_tensor, object_mask1_tensor)
         else:
             #print(if_exchange)
-            return (warp2_tensor, warp1_tensor, mask2_tensor, mask1_tensor)
+            return (warp2_tensor, warp1_tensor, mask2_tensor, mask1_tensor, object_mask1_tensor)
 
 
     def __len__(self):

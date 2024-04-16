@@ -58,8 +58,8 @@ def main():
 
 
 
-    image_dir = '/inspurfs/group/gaoshh/jinjiping/UDIS2/UDIS-D/testing/testing/warp1'
-    prediction_dir = "/inspurfs/group/gaoshh/jinjiping/UDIS2/UDIS-D/testing/testing/warp1_after_object_detection/"
+    image_dir = "/inspurfs/group/gaoshh/jinjiping/UDIS2/UDIS-D/training/training/warp2/"
+    prediction_dir = "/inspurfs/group/gaoshh/jinjiping/UDIS2/UDIS-D/training/training/object_mask2/"
     model_dir = '/inspurfs/group/gaoshh/jinjiping/UDIS2/saved_models/u2net.pth'
 
     img_name_list = glob.glob(image_dir + os.sep + '*')
