@@ -2,7 +2,7 @@
 import argparse
 import torch
 from torch.utils.data import DataLoader
-from network import build_model, Network
+from network import build_model, Network_test, build_test_model
 from dataset import *
 import os
 import numpy as np
@@ -24,30 +24,37 @@ def test(args):
     test_loader = DataLoader(dataset=test_data, batch_size=args.batch_size, num_workers=1, shuffle=False, drop_last=False)
 
     # define the network
-    net = Network()
+    net = Network_test()
     if torch.cuda.is_available():
         net = net.cuda()
 
     #load the existing models if it exists
-    ckpt_list = glob.glob(MODEL_DIR + "/*.pth")
-    ckpt_list.sort()
-    if len(ckpt_list) != 0:
-        model_path = ckpt_list[-1]
-        checkpoint = torch.load(model_path)
-        net.load_state_dict(checkpoint['model'])
-        print('load model from {}!'.format(model_path))
-    else:
-        print('No checkpoint found!')
-        return
+    #ckpt_list = glob.glob(MODEL_DIR + "/*.pth")
+    # ckpt_list.sort()
+    # if len(ckpt_list) != 0:
+        # model_path = ckpt_list[-1]
+        # checkpoint = torch.load(model_path)
+        # net.load_state_dict(checkpoint['model'])
+        # print('load model from {}!'.format(model_path))
+    # else:
+    #     print('No checkpoint found!')
+    #     return
+    
+    #ckpt_list = "/inspurfs/group/gaoshh/jinjiping/UDIS2/composition/composition_models_object_loss/epoch040_model.pth"
+
+    model_path = "/inspurfs/group/gaoshh/jinjiping/UDIS2/composition/composition_models_object_loss/epoch040_model.pth"
+    checkpoint = torch.load(model_path)
+    net.load_state_dict(checkpoint['model'])
+    print('load model from {}!'.format(model_path))
 
 
-    path_learn_mask1 = '../learn_mask1/'
+    path_learn_mask1 = '/inspurfs/group/gaoshh/jinjiping/UDIS2/composition/test-result-of-object-loss/learn_mask1/'
     if not os.path.exists(path_learn_mask1):
         os.makedirs(path_learn_mask1)
-    path_learn_mask2 = '../learn_mask2/'
+    path_learn_mask2 = '/inspurfs/group/gaoshh/jinjiping/UDIS2/composition/test-result-of-object-loss/learn_mask2/'
     if not os.path.exists(path_learn_mask2):
         os.makedirs(path_learn_mask2)
-    path_final_composition = '../composition/'
+    path_final_composition = '/inspurfs/group/gaoshh/jinjiping/UDIS2/composition/test-result-of-object-loss/composition/'
     if not os.path.exists(path_final_composition):
         os.makedirs(path_final_composition)
 
@@ -61,18 +68,20 @@ def test(args):
         mask1_tensor = batch_value[2].float()
         mask2_tensor = batch_value[3].float()
 
+
         if torch.cuda.is_available():
             warp1_tensor = warp1_tensor.cuda()
             warp2_tensor = warp2_tensor.cuda()
             mask1_tensor = mask1_tensor.cuda()
             mask2_tensor = mask2_tensor.cuda()
 
+
         # if inpu1_tesnor.size()[2]*inpu1_tesnor.size()[3] > 1200000:
         #     print("oversize")
         #     continue
 
         with torch.no_grad():
-            batch_out = build_model(net, warp1_tensor, warp2_tensor, mask1_tensor, mask2_tensor)
+            batch_out = build_test_model(net, warp1_tensor, warp2_tensor, mask1_tensor, mask2_tensor)
 
         stitched_image = batch_out['stitched_image']
         learned_mask1 = batch_out['learned_mask1']
@@ -100,7 +109,7 @@ if __name__=="__main__":
 
     parser.add_argument('--gpu', type=str, default='0')
     parser.add_argument('--batch_size', type=int, default=1)
-    parser.add_argument('--test_path', type=str, default='/opt/data/private/nl/Data/UDIS-D/testing/')
+    parser.add_argument('--test_path', type=str, default='/inspurfs/group/gaoshh/jinjiping/UDIS2/UDIS-D/testing/testing/')
 
     print('<==================== Loading data ===================>\n')
 
