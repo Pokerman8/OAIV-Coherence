@@ -44,6 +44,15 @@ we developed two specialized datasets: DAVISProcessed10 and RealWorld400. DAVISP
 
 A portion of the test set can be downloaded from [this link](https://1drv.ms/u/c/89cf0bfd859af8e2/ES86DDgxt-FNi5iT6_CpgToBlBveoDJvksna1mPYx2Gfdw?e=h1mPvU), and we will release all the test data soon.
 
+## Training
+
+To train the mdoel, set the path to the training dataset in `train.py`. Please follow the instructions in the code comments to adjust the paths accordingly.
+
+```
+python train.py
+```
+
+
 ## Testing
 
 ### test with our pretrain model
@@ -53,6 +62,12 @@ You can download the pre-trained model from [this link](https://1drv.ms/u/c/89cf
 ```
 python test.py
 ```
+
+## Results
+
+<img src="./images/result_1.png">
+
+<img src="./images/result_2.png">
 
 ## TODO List
 
