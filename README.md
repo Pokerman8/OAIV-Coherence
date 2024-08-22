@@ -14,11 +14,13 @@ Seam carving is a classic topic in computer graphics, playing a crucial role in 
 We implement this work with UWSL2(Ubuntu24.04), 3090, and CUDA11.
 
 1. Git clone this repository.
-   ```
+
+```
   git clone https://github.com/Pokerman8/OAIV-Coherence.git
   ```
 
 3. Create a new conda environment
+  
   ```
   conda env create -f environment.yml
   ```
