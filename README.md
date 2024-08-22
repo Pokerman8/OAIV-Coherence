@@ -48,6 +48,14 @@ A portion of the test set can be downloaded from [this link](https://1drv.ms/u/c
 
 ### test with our pretrain model
 
+You can download the pre-trained model from [this link](https://1drv.ms/u/c/89cf0bfd859af8e2/Eb58i2onC3lIiXkLRHzYFJcBNmZxp1bw4Fak33waXHPszA?e=Pu3j6e). 
+
+To run the tests, set the path to the testing dataset in `test.py`. Please follow the instructions in the code comments to adjust the paths accordingly.
+
+## TODO List
+
+
+
 ## References
 
 1. Lang Nie, Chunyu Lin, Kang Liao, Shuaicheng Liu, and Yao Zhao. "Unsupervised Deep Image Stitching: Reconstructing Stitched Features to Images." IEEE Transactions on Image Processing, vol. 30, pp. 6184-6197, 2021. [doi:10.1109/TIP.2021.3092828](https://doi.org/10.1109/TIP.2021.3092828).
