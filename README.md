@@ -1,7 +1,7 @@
 # OAIV-Coherence
 Official pytorch implementation of OAIV-Coherence(Enhancing Seam Carving with Object Awareness for Improved Visual Coherence)
 
-<img src="./framework.jpg">
+<img src="./framework.png">
 
 
 ## Introduction
