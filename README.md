@@ -1,8 +1,6 @@
-# oasd
-objects aware seam detection
+# OAIV-Coherence
+Official pytorch implementation of OAIV-Coherence(Enhancing Seam Carving with Object Awareness for Improved Visual Coherence)
 
-to do list
-1. generated segmentation masks for warped UDIS dataset (salient detection)
 
 
 
