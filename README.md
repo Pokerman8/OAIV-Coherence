@@ -48,9 +48,11 @@ A portion of the test set can be downloaded from [this link](https://1drv.ms/u/c
 
 ### test with our pretrain model
 
-You can download the pre-trained model from [this link](https://1drv.ms/u/c/89cf0bfd859af8e2/Eb58i2onC3lIiXkLRHzYFJcBNmZxp1bw4Fak33waXHPszA?e=Pu3j6e). 
+You can download the pre-trained model from [this link](https://1drv.ms/u/c/89cf0bfd859af8e2/Eb58i2onC3lIiXkLRHzYFJcBNmZxp1bw4Fak33waXHPszA?e=Pu3j6e). To run the tests, set the path to the testing dataset in `test.py`. Please follow the instructions in the code comments to adjust the paths accordingly.
 
-To run the tests, set the path to the testing dataset in `test.py`. Please follow the instructions in the code comments to adjust the paths accordingly.
+```
+python test.py
+```
 
 ## TODO List
 
