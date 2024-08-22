@@ -42,7 +42,7 @@ we developed two specialized datasets: DAVISProcessed10 and RealWorld400. DAVISP
 
 <img src="./images/testset.png">
 
-Download the training set from [Onedrive](https://1drv.ms/u/c/89cf0bfd859af8e2/EW5zJJcidrJFtW4sMSwVaBgBsArnsipWeL9Z92N8YhqiCQ?e=dugcFQ).
+A portion of the test set can be downloaded from [this link](https://1drv.ms/u/c/89cf0bfd859af8e2/ES86DDgxt-FNi5iT6_CpgToBlBveoDJvksna1mPYx2Gfdw?e=h1mPvU), and we will release all the test data soon.
 
 ## Testing
 
