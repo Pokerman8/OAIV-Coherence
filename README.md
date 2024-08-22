@@ -56,7 +56,7 @@ python test.py
 
 ## TODO List
 
-
+We plan to release the code for multi-image stitching and performance evaluation in the near future.
 
 ## References
 
