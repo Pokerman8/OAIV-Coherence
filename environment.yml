@@ -1,4 +1,4 @@
-name: nl
+name: oaiv
 channels:
   - nvidia
   - pytorch
@@ -354,4 +354,4 @@ dependencies:
       - tensorboard-plugin-wit==1.8.1
       - timm==0.4.9
       - yacs==0.1.6
-prefix: /public/home/jinjiping2023/anaconda3/envs/nl
+prefix: /public/home/your_usr_id/anaconda3/envs/oaiv
